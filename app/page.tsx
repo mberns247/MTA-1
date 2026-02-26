@@ -319,6 +319,220 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen w-full px-6 pb-10 pt-4 md:px-12 md:pt-6">
+      {settingsOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[9999] bg-black/40"
+            style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            role="presentation"
+            onClick={() => setSettingsOpen(false)}
+          />
+          <div
+            className="fixed left-1/2 top-1/2 z-[10000] w-full max-w-md max-h-[90vh] -translate-x-1/2 -translate-y-1/2 rounded-xl border shadow-lg overflow-auto"
+            style={{ ...boardStyles.panel, ...boardStyles.border }}
+            role="dialog"
+            aria-labelledby="settings-dialog-title"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="border-b px-4 py-3 sticky top-0 z-10 flex items-center justify-between gap-3" style={{ ...boardStyles.border, ...boardStyles.panel }}>
+              <h2 id="settings-dialog-title" className="text-sm font-semibold" style={boardStyles.text}>
+                Settings
+              </h2>
+              <button
+                type="button"
+                onClick={() => setSettingsOpen(false)}
+                className="rounded border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
+                style={boardStyles.input}
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-4">
+              <div className="flex flex-col" style={{ borderTop: "1px solid var(--board-border)" }}>
+                <div className="flex items-center justify-between gap-4 py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
+                  <span className="text-sm font-medium" style={boardStyles.text}>Large Mode</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm" style={boardStyles.textDim}>Regular</span>
+                    <button
+                      id="large-mode-toggle"
+                      type="button"
+                      role="switch"
+                      aria-checked={config.largeMode}
+                      title={config.largeMode ? "Switch to regular view" : "Switch to large-type view"}
+                      onClick={() => updateConfig({ largeMode: !config.largeMode })}
+                      className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
+                      style={{
+                        width: 44,
+                        height: 24,
+                        minWidth: 44,
+                        padding: 0,
+                        border: "none",
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        backgroundColor: config.largeMode ? "var(--board-accent)" : "var(--board-border)",
+                        position: "relative",
+                      }}
+                    >
+                      <span role="presentation" style={{ position: "absolute", top: 2, left: config.largeMode ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
+                    </button>
+                    <span className="text-sm" style={boardStyles.textDim}>Large</span>
+                  </div>
+                </div>
+                <div className="py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm font-medium" style={boardStyles.text}>Sleep Mode</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm" style={boardStyles.textDim}>Off</span>
+                      <button
+                        id="sleep-mode-toggle"
+                        type="button"
+                        role="switch"
+                        aria-checked={config.sleepMode}
+                        title={config.sleepMode ? "Turn off sleep mode" : "Turn on sleep mode"}
+                        onClick={() => updateConfig({ sleepMode: !config.sleepMode })}
+                        className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
+                        style={{
+                          width: 44,
+                          height: 24,
+                          minWidth: 44,
+                          padding: 0,
+                          border: "none",
+                          borderRadius: 12,
+                          cursor: "pointer",
+                          backgroundColor: config.sleepMode ? "var(--board-accent)" : "var(--board-border)",
+                          position: "relative",
+                        }}
+                      >
+                        <span role="presentation" style={{ position: "absolute", top: 2, left: config.sleepMode ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
+                      </button>
+                      <span className="text-sm" style={boardStyles.textDim}>On</span>
+                      <button
+                        type="button"
+                        onClick={() => setSleepModeInfoOpen((o) => !o)}
+                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
+                        style={{ ...boardStyles.border, ...boardStyles.text, backgroundColor: "transparent" }}
+                        title="What is Sleep Mode?"
+                        aria-label="Sleep Mode info"
+                      >
+                        i
+                      </button>
+                    </div>
+                  </div>
+                  {sleepModeInfoOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-[102] bg-black/40"
+                        role="presentation"
+                        onClick={() => setSleepModeInfoOpen(false)}
+                      />
+                      <div
+                        className="fixed left-1/2 top-1/2 z-[103] w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border p-4 shadow-lg"
+                        style={{
+                          ...boardStyles.panel,
+                          ...boardStyles.border,
+                        }}
+                        role="dialog"
+                        aria-labelledby="sleep-mode-info-title"
+                        aria-modal="true"
+                      >
+                        <h3 id="sleep-mode-info-title" className="mb-2 text-sm font-semibold" style={boardStyles.text}>
+                          What is Sleep Mode?
+                        </h3>
+                        <p className="text-sm" style={boardStyles.textDim}>
+                          During the Start–Stop hours you choose, the dashboard is dimmed to 25% brightness. It stays on
+                          so you can still see arrivals, but it won't shine unnecessary light into your home at night.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setSleepModeInfoOpen(false)}
+                          className="mt-3 rounded border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
+                          style={boardStyles.input}
+                        >
+                          OK
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {config.sleepMode && (
+                    <div className="mt-2 flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm" style={boardStyles.textDim}>Start</label>
+                        <select value={config.sleepStart} onChange={(e) => updateConfig({ sleepStart: e.target.value })} className="rounded border px-2 py-1.5 text-sm focus:outline-none" style={boardStyles.input}>
+                          {SLEEP_TIME_OPTIONS.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
+                        </select>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm" style={boardStyles.textDim}>Stop</label>
+                        <select value={config.sleepEnd} onChange={(e) => updateConfig({ sleepEnd: e.target.value })} className="rounded border px-2 py-1.5 text-sm focus:outline-none" style={boardStyles.input}>
+                          {SLEEP_TIME_OPTIONS.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-4 py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
+                  <span className="text-sm font-medium" style={boardStyles.text}>Theme</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm" style={boardStyles.textDim}>Light</span>
+                    <button
+                      id="theme-toggle"
+                      type="button"
+                      role="switch"
+                      aria-checked={config.theme === "light"}
+                      title={config.theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+                      onClick={() => updateConfig({ theme: config.theme === "light" ? "dark" : "light" })}
+                      className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
+                      style={{
+                        width: 44,
+                        height: 24,
+                        minWidth: 44,
+                        padding: 0,
+                        border: "none",
+                        borderRadius: 12,
+                        cursor: "pointer",
+                        backgroundColor: config.theme === "light" ? "var(--board-accent)" : "var(--board-border)",
+                        position: "relative",
+                      }}
+                    >
+                      <span role="presentation" style={{ position: "absolute", top: 2, left: config.theme === "light" ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
+                    </button>
+                    <span className="text-sm" style={boardStyles.textDim}>Dark</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-4 py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
+                  <span className="text-sm font-medium" style={boardStyles.text}>Layout</span>
+                  <div className="flex gap-1.5">
+                    <button type="button" onClick={() => updateConfig({ layout: "grid" })} title="Grid (2×2)" aria-label="Grid view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "grid" ? "var(--board-accent)" : "var(--board-border)" }}>
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="1" y="1" width="8" height="8" rx="1" /><rect x="11" y="1" width="8" height="8" rx="1" /><rect x="1" y="11" width="8" height="8" rx="1" /><rect x="11" y="11" width="8" height="8" rx="1" /></svg>
+                    </button>
+                    <button type="button" onClick={() => updateConfig({ layout: "list" })} title="List (vertical)" aria-label="List view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "list" ? "var(--board-accent)" : "var(--board-border)" }}>
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="3" y="2" width="14" height="3" rx="1" /><rect x="3" y="6.5" width="14" height="3" rx="1" /><rect x="3" y="11" width="14" height="3" rx="1" /><rect x="3" y="15.5" width="14" height="3" rx="1" /></svg>
+                    </button>
+                    <button type="button" onClick={() => updateConfig({ layout: "page" })} title="Page (horizontal)" aria-label="Page view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "page" ? "var(--board-accent)" : "var(--board-border)" }}>
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="2" y="4" width="3" height="12" rx="1" /><rect x="6.5" y="4" width="3" height="12" rx="1" /><rect x="11" y="4" width="3" height="12" rx="1" /><rect x="15.5" y="4" width="3" height="12" rx="1" /></svg>
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-4 py-5">
+                  <label htmlFor="settings-refresh-interval" className="text-sm font-medium" style={boardStyles.text}>Refresh interval (sec)</label>
+                  <input
+                    id="settings-refresh-interval"
+                    type="number"
+                    min={MIN_REFRESH_SEC}
+                    max={MAX_REFRESH_SEC}
+                    step={1}
+                    value={config.refreshIntervalSec}
+                    onChange={(e) => updateConfig({ refreshIntervalSec: Math.max(MIN_REFRESH_SEC, Math.min(MAX_REFRESH_SEC, parseInt(e.target.value, 10) || DEFAULT_REFRESH_SEC)) })}
+                    className="w-20 rounded border px-2 py-1.5 text-right text-sm focus:outline-none"
+                    style={boardStyles.input}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
       <div
         className="w-full"
         style={{
@@ -434,208 +648,6 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {settingsOpen && (
-          <>
-            <div className="fixed inset-0 z-20 bg-black/40" role="presentation" onClick={() => setSettingsOpen(false)} />
-            <div
-              className="fixed left-1/2 top-1/2 z-30 w-full max-w-md max-h-[90vh] -translate-x-1/2 -translate-y-1/2 rounded-xl border shadow-lg overflow-auto"
-              style={{ ...boardStyles.panel, ...boardStyles.border }}
-              role="dialog"
-              aria-labelledby="settings-dialog-title"
-              aria-modal="true"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="border-b px-4 py-3 sticky top-0 z-10" style={{ ...boardStyles.border, ...boardStyles.panel }}>
-                <h2 id="settings-dialog-title" className="text-sm font-semibold" style={boardStyles.text}>
-                  Settings
-                </h2>
-              </div>
-              <div className="p-4">
-                <div className="flex flex-col" style={{ borderTop: "1px solid var(--board-border)" }}>
-                  <div className="flex items-center justify-between gap-4 py-3" style={{ borderBottom: "1px solid var(--board-border)" }}>
-                    <span className="text-sm font-medium" style={boardStyles.text}>Large Mode</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm" style={boardStyles.textDim}>Regular</span>
-                      <button
-                        id="large-mode-toggle"
-                        type="button"
-                        role="switch"
-                        aria-checked={config.largeMode}
-                        title={config.largeMode ? "Switch to regular view" : "Switch to large-type view"}
-                        onClick={() => updateConfig({ largeMode: !config.largeMode })}
-                        className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
-                        style={{
-                          width: 44,
-                          height: 24,
-                          minWidth: 44,
-                          padding: 0,
-                          border: "none",
-                          borderRadius: 12,
-                          cursor: "pointer",
-                          backgroundColor: config.largeMode ? "var(--board-accent)" : "var(--board-border)",
-                          position: "relative",
-                        }}
-                      >
-                        <span role="presentation" style={{ position: "absolute", top: 2, left: config.largeMode ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
-                      </button>
-                      <span className="text-sm" style={boardStyles.textDim}>Large</span>
-                    </div>
-                  </div>
-                  <div className="py-3" style={{ borderBottom: "1px solid var(--board-border)" }}>
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-sm font-medium" style={boardStyles.text}>Sleep Mode</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm" style={boardStyles.textDim}>Off</span>
-                        <button
-                          id="sleep-mode-toggle"
-                  type="button"
-                  role="switch"
-                  aria-checked={config.sleepMode}
-                  title={config.sleepMode ? "Turn off sleep mode" : "Turn on sleep mode"}
-                  onClick={() => updateConfig({ sleepMode: !config.sleepMode })}
-                  className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
-                  style={{
-                    width: 44,
-                    height: 24,
-                    minWidth: 44,
-                    padding: 0,
-                    border: "none",
-                    borderRadius: 12,
-                    cursor: "pointer",
-                    backgroundColor: config.sleepMode ? "var(--board-accent)" : "var(--board-border)",
-                    position: "relative",
-                  }}
-                >
-                  <span role="presentation" style={{ position: "absolute", top: 2, left: config.sleepMode ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
-                </button>
-                        <span className="text-sm" style={boardStyles.textDim}>On</span>
-                        <button
-                          type="button"
-                          onClick={() => setSleepModeInfoOpen((o) => !o)}
-                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
-                          style={{ ...boardStyles.border, ...boardStyles.text, backgroundColor: "transparent" }}
-                          title="What is Sleep Mode?"
-                          aria-label="Sleep Mode info"
-                        >
-                          i
-                        </button>
-                      </div>
-                    </div>
-                {sleepModeInfoOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40 bg-black/40"
-                      role="presentation"
-                      onClick={() => setSleepModeInfoOpen(false)}
-                    />
-                    <div
-                      className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border p-4 shadow-lg"
-                      style={{
-                        ...boardStyles.panel,
-                        ...boardStyles.border,
-                      }}
-                      role="dialog"
-                      aria-labelledby="sleep-mode-info-title"
-                      aria-modal="true"
-                    >
-                      <h3 id="sleep-mode-info-title" className="mb-2 text-sm font-semibold" style={boardStyles.text}>
-                        What is Sleep Mode?
-                      </h3>
-                      <p className="text-sm" style={boardStyles.textDim}>
-                        During the Start–Stop hours you choose, the dashboard is dimmed to 25% brightness. It stays on
-                        so you can still see arrivals, but it won’t shine unnecessary light into your home at night.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => setSleepModeInfoOpen(false)}
-                        className="mt-3 rounded border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
-                        style={boardStyles.input}
-                      >
-                        OK
-                      </button>
-                    </div>
-                  </>
-                )}
-                    {config.sleepMode && (
-                      <div className="mt-2 flex items-center gap-3">
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm" style={boardStyles.textDim}>Start</label>
-                          <select value={config.sleepStart} onChange={(e) => updateConfig({ sleepStart: e.target.value })} className="rounded border px-2 py-1.5 text-sm focus:outline-none" style={boardStyles.input}>
-                            {SLEEP_TIME_OPTIONS.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
-                          </select>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm" style={boardStyles.textDim}>Stop</label>
-                          <select value={config.sleepEnd} onChange={(e) => updateConfig({ sleepEnd: e.target.value })} className="rounded border px-2 py-1.5 text-sm focus:outline-none" style={boardStyles.input}>
-                            {SLEEP_TIME_OPTIONS.map((o) => (<option key={o.value} value={o.value}>{o.label}</option>))}
-                          </select>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between gap-4 py-3" style={{ borderBottom: "1px solid var(--board-border)" }}>
-                    <span className="text-sm font-medium" style={boardStyles.text}>Theme</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm" style={boardStyles.textDim}>Light</span>
-                      <button
-                        id="theme-toggle"
-                        type="button"
-                        role="switch"
-                        aria-checked={config.theme === "light"}
-                        title={config.theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
-                        onClick={() => updateConfig({ theme: config.theme === "light" ? "dark" : "light" })}
-                        className="focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] focus:ring-offset-2 focus:ring-offset-[var(--board-bg)]"
-                        style={{
-                          width: 44,
-                          height: 24,
-                          minWidth: 44,
-                          padding: 0,
-                          border: "none",
-                          borderRadius: 12,
-                          cursor: "pointer",
-                          backgroundColor: config.theme === "light" ? "var(--board-accent)" : "var(--board-border)",
-                          position: "relative",
-                        }}
-                      >
-                        <span role="presentation" style={{ position: "absolute", top: 2, left: config.theme === "light" ? 2 : 22, width: 20, height: 20, borderRadius: "50%", backgroundColor: "#fff", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "left 0.2s ease" }} />
-                      </button>
-                      <span className="text-sm" style={boardStyles.textDim}>Dark</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 py-3" style={{ borderBottom: "1px solid var(--board-border)" }}>
-                    <span className="text-sm font-medium" style={boardStyles.text}>Layout</span>
-                    <div className="flex gap-1.5">
-                      <button type="button" onClick={() => updateConfig({ layout: "grid" })} title="Grid (2×2)" aria-label="Grid view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "grid" ? "var(--board-accent)" : "var(--board-border)" }}>
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="1" y="1" width="8" height="8" rx="1" /><rect x="11" y="1" width="8" height="8" rx="1" /><rect x="1" y="11" width="8" height="8" rx="1" /><rect x="11" y="11" width="8" height="8" rx="1" /></svg>
-                      </button>
-                      <button type="button" onClick={() => updateConfig({ layout: "list" })} title="List (vertical)" aria-label="List view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "list" ? "var(--board-accent)" : "var(--board-border)" }}>
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="3" y="2" width="14" height="3" rx="1" /><rect x="3" y="6.5" width="14" height="3" rx="1" /><rect x="3" y="11" width="14" height="3" rx="1" /><rect x="3" y="15.5" width="14" height="3" rx="1" /></svg>
-                      </button>
-                      <button type="button" onClick={() => updateConfig({ layout: "page" })} title="Page (horizontal)" aria-label="Page view" className="flex h-9 w-9 items-center justify-center rounded border focus:outline-none" style={{ ...boardStyles.input, borderWidth: 2, borderColor: config.layout === "page" ? "var(--board-accent)" : "var(--board-border)" }}>
-                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" aria-hidden><rect x="2" y="4" width="3" height="12" rx="1" /><rect x="6.5" y="4" width="3" height="12" rx="1" /><rect x="11" y="4" width="3" height="12" rx="1" /><rect x="15.5" y="4" width="3" height="12" rx="1" /></svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 py-3">
-                    <label htmlFor="settings-refresh-interval" className="text-sm font-medium" style={boardStyles.text}>Refresh interval (sec)</label>
-                    <input
-                      id="settings-refresh-interval"
-                      type="number"
-                      min={MIN_REFRESH_SEC}
-                      max={MAX_REFRESH_SEC}
-                      step={1}
-                      value={config.refreshIntervalSec}
-                      onChange={(e) => updateConfig({ refreshIntervalSec: Math.max(MIN_REFRESH_SEC, Math.min(MAX_REFRESH_SEC, parseInt(e.target.value, 10) || DEFAULT_REFRESH_SEC)) })}
-                      className="w-20 rounded border px-2 py-1.5 text-right text-sm focus:outline-none"
-                      style={boardStyles.input}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
         {fetchError && (
           <p className="mb-4 text-sm" style={boardStyles.error}>
             {fetchError}
@@ -679,7 +691,20 @@ export default function DashboardPage() {
                 className="rounded-xl border overflow-hidden relative h-full flex flex-col min-h-0"
                 style={boardStyles.panel}
               >
-                <div className="border-b px-6 py-4 flex items-center gap-2 flex-wrap flex-shrink-0" style={boardStyles.border}>
+                <button
+                  type="button"
+                  onClick={() => setFlippedModuleIndex(index)}
+                  className="z-10 flex shrink-0 items-center justify-center rounded-full border focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] overflow-hidden"
+                  style={{ ...boardStyles.border, ...boardStyles.text, backgroundColor: "transparent", borderRadius: "50%", width: 32, height: 32, minWidth: 32, minHeight: 32, position: "absolute", top: 12, right: 12 }}
+                  title="Configure this module"
+                  aria-label="Configure this module"
+                >
+                  <svg viewBox="0 0 24 24" width={16} height={16} className="shrink-0" aria-hidden>
+                    <circle cx="12" cy="12" r="11" fill="#fff" />
+                    <text x="12" y="16" textAnchor="middle" fill="#1e40af" fontSize="14" fontWeight="bold" fontFamily="system-ui, sans-serif">i</text>
+                  </svg>
+                </button>
+                <div className="border-b pl-6 py-4 flex items-center gap-2 flex-wrap flex-shrink-0" style={{ ...boardStyles.border, paddingRight: 52 }}>
                   {result?.alerts && result.alerts.length > 0 && (
                     <button
                       type="button"
@@ -696,7 +721,7 @@ export default function DashboardPage() {
                     </button>
                   )}
                   {isSubway ? (
-                    <h2 className="font-bold" style={{ ...boardStyles.text, fontSize: "1.5rem", fontWeight: 700 }}>
+                    <h2 className="font-bold min-w-0 flex-1 truncate" style={{ ...boardStyles.text, fontSize: "1.5rem", fontWeight: 700 }} title={option?.type === "subway" ? (() => { const station = option.stopLabel ?? "—"; const line = getSubwayLineLabel(option); const dest = getSubwayHeaderDestination(option); return dest ? `Subway · ${station} · ${line} → ${dest}` : `Subway · ${station} · ${line}`; })() : undefined}>
                       {option?.type === "subway"
                         ? (() => {
                             const station = option.stopLabel ?? "—";
@@ -710,26 +735,16 @@ export default function DashboardPage() {
                     </h2>
                   ) : (
                     <>
-                      <h2 className="font-bold" style={{ ...boardStyles.text, fontSize: "1.5rem", fontWeight: 700 }}>
+                      <h2 className="font-bold min-w-0 flex-1 truncate" style={{ ...boardStyles.text, fontSize: "1.5rem", fontWeight: 700 }} title={`Bus – ${label.split(" · ")[0] ?? "—"} – ${option?.stopLabel ?? ""}`}>
                         Bus – {label.split(" · ")[0] ?? "—"} – {option?.stopLabel ?? ""}
                       </h2>
                       {option?.type === "bus" && (option as BusOption).destinationLabel && (
-                        <p className="mt-1 font-semibold w-full" style={{ ...boardStyles.textDim, fontSize: "1rem" }}>
+                        <p className="mt-1 font-semibold w-full min-w-0 truncate" style={{ ...boardStyles.textDim, fontSize: "1rem" }}>
                           {(option as BusOption).destinationLabel}
                         </p>
                       )}
                     </>
                   )}
-                  <button
-                    type="button"
-                    onClick={() => setFlippedModuleIndex(index)}
-                    className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full border focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]"
-                    style={{ ...boardStyles.border, ...boardStyles.text, backgroundColor: "transparent" }}
-                    title="Configure this module"
-                    aria-label="Configure this module"
-                  >
-                    <span className="text-sm font-bold">i</span>
-                  </button>
                 </div>
                 {alertModalSlotIndex === index && result?.alerts && result.alerts.length > 0 && (
                   <div
@@ -869,13 +884,11 @@ export default function DashboardPage() {
                 </div>
               </section>
                   </div>
-                  <div className="module-flip-back rounded-xl border overflow-auto" style={boardStyles.panel}>
-                    <div className="border-b px-4 py-3 flex items-center justify-between" style={boardStyles.border}>
-                      <span className="text-sm font-semibold" style={boardStyles.text}>Configure module</span>
-                      <button type="button" onClick={() => setFlippedModuleIndex(null)} className="rounded border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)]" style={boardStyles.input}>Done</button>
-                    </div>
-                    <div className="p-4 space-y-3">
-                      <div>
+                  <div className="module-flip-back rounded-xl border overflow-auto relative" style={boardStyles.panel}>
+                    <button type="button" onClick={() => setFlippedModuleIndex(null)} className="rounded border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] z-10" style={{ ...boardStyles.input, position: "absolute", top: 12, right: 12 }}>Save</button>
+                    <div className="border-b" style={{ ...boardStyles.border, paddingTop: 44 }} />
+                    <div className="p-4 flex flex-col">
+                      <div style={{ marginBottom: 20 }}>
                         <label className="mb-1 block text-xs" style={boardStyles.textDim}>Type</label>
                         <select value={slot.type} onChange={(e) => { const type = (e.target.value as SlotType); const options = getOptionsByType(type); updateSlot(index, { type, optionId: options[0]?.id ?? "" }); }} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
                           <option value="subway">Subway</option>
@@ -884,14 +897,14 @@ export default function DashboardPage() {
                       </div>
                       {isSubwaySlot ? (
                         <>
-                          <div>
+                          <div style={{ marginBottom: 20 }}>
                             <label className="mb-1 block text-xs" style={boardStyles.textDim}>Station</label>
                             <input type="text" placeholder="Search stations…" value={stationSearch[index] ?? ""} onChange={(e) => setStationSearch((prev) => ({ ...prev, [index]: e.target.value }))} className="mb-1.5 w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input} />
                             <select value={currentStation} onChange={(e) => { const station = e.target.value; const plats = getPlatformsAtStation(station); const first = plats[0]; if (first) updateSlot(index, { optionId: first.optionIds[0], optionIds: first.optionIds }); else updateSlot(index, { optionId: "", optionIds: undefined }); }} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
                               {(() => { const filtered = filterOptions(subwayStations, stationSearch[index] ?? ""); const list = currentStation && !filtered.includes(currentStation) ? [currentStation, ...filtered] : filtered; return list.map((s) => (<option key={s} value={s}>{s}</option>)); })()}
                             </select>
                           </div>
-                          <div>
+                          <div style={{ marginBottom: 20 }}>
                             <label className="mb-1 block text-xs" style={boardStyles.textDim}>Platform</label>
                             <select value={platforms.find((c) => c.optionIds.includes(slot.optionId))?.optionIds[0] ?? slot.optionId} onChange={(e) => { const choice = platforms.find((c) => c.optionIds[0] === e.target.value); if (choice) updateSlot(index, { optionId: choice.optionIds[0], optionIds: choice.optionIds }); }} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
                               {platforms.map((p) => (<option key={p.optionIds[0]} value={p.optionIds[0]}>{p.label}</option>))}
@@ -900,14 +913,14 @@ export default function DashboardPage() {
                         </>
                       ) : (
                         <>
-                          <div>
+                          <div style={{ marginBottom: 20 }}>
                             <label className="mb-1 block text-xs" style={boardStyles.textDim}>Stop</label>
                             <input type="text" placeholder="Search stops…" value={stopSearch[index] ?? ""} onChange={(e) => setStopSearch((prev) => ({ ...prev, [index]: e.target.value }))} className="mb-1.5 w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input} />
                             <select value={currentStop} onChange={(e) => { const stop = e.target.value; const dirs = getDirectionsForStopNormalized(slot.type, stop); updateSlot(index, { optionId: dirs[0]?.id ?? "" }); }} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
                               {(() => { const filtered = filterOptions(stops, stopSearch[index] ?? ""); const list = currentStop && !filtered.includes(currentStop) ? [currentStop, ...filtered] : filtered; return list.map((s) => (<option key={s} value={s}>{s}</option>)); })()}
                             </select>
                           </div>
-                          <div>
+                          <div style={{ marginBottom: 20 }}>
                             <label className="mb-1 block text-xs" style={boardStyles.textDim}>Direction</label>
                             <select value={slot.optionId} onChange={(e) => updateSlot(index, { optionId: e.target.value })} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
                               {directions.map((d) => (<option key={d.id} value={d.id}>{d.label}{d.type === "bus" && d.destinationLabel ? ` → ${d.destinationLabel}` : ""}</option>))}
@@ -915,15 +928,22 @@ export default function DashboardPage() {
                           </div>
                         </>
                       )}
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <label className="mb-1 block text-xs" style={boardStyles.textDim}># Arrivals</label>
-                          <select value={slot.maxArrivals} onChange={(e) => updateSlot(index, { maxArrivals: parseInt(e.target.value, 10) })} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
-                            {[1, 2, 3, 4].map((n) => (<option key={n} value={n}>{n}</option>))}
-                          </select>
-                        </div>
-                        <button type="button" onClick={() => removeSlot(index)} disabled={config.slots.length <= MIN_SLOTS} className="text-sm underline focus:outline-none disabled:opacity-50 self-end" style={config.theme === "dark" ? { color: "#60a5fa" } : boardStyles.accent}>Remove</button>
+                      <div style={{ marginBottom: 20 }}>
+                        <label className="mb-1 block text-xs" style={boardStyles.textDim}># Arrivals</label>
+                        <select value={slot.maxArrivals} onChange={(e) => updateSlot(index, { maxArrivals: parseInt(e.target.value, 10) })} className="w-full rounded border px-3 py-2 text-sm focus:outline-none" style={boardStyles.input}>
+                          {[1, 2, 3, 4].map((n) => (<option key={n} value={n}>{n}</option>))}
+                        </select>
                       </div>
+                    </div>
+                    <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", zIndex: 10 }}>
+                      <button type="button" onClick={() => removeSlot(index)} disabled={config.slots.length <= MIN_SLOTS} className="p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-[var(--board-accent)] disabled:opacity-50 disabled:pointer-events-none hover:text-gray-200" style={{ backgroundColor: "transparent", border: "none" }} title="Remove module" aria-label="Remove module">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          <line x1="10" y1="11" x2="10" y2="17" />
+                          <line x1="14" y1="11" x2="14" y2="17" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
