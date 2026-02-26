@@ -1,0 +1,34 @@
+{
+  "1234567": {
+    "0": "Van Cortlandt Park-242 St",
+    "1": "South Ferry"
+  },
+  "sir": {
+    "0": "Times Sq-42 St",
+    "1": "Grand Central-42 St"
+  },
+  "ace": {
+    "0": "Euclid Av",
+    "1": "Far Rockaway-Mott Av"
+  },
+  "bdfm": {
+    "0": "Bedford Park Blvd",
+    "1": "Brighton Beach"
+  },
+  "g": {
+    "0": "Court Sq",
+    "1": "Church Av"
+  },
+  "l": {
+    "0": "8 Av",
+    "1": "Canarsie-Rockaway Pkwy"
+  },
+  "nqrw": {
+    "0": "Astoria-Ditmars Blvd",
+    "1": "Coney Island-Stillwell Av"
+  },
+  "jz": {
+    "0": "Jamaica Center-Parsons/Archer",
+    "1": "Broad St"
+  }
+}

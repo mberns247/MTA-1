@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Sleep mode: dim entire page including root background */
+html.sleep-mode {
+  filter: brightness(0.25);
+  transition: filter 0.3s ease;
+}
+
+/* Board palette: dark (default) and light */
+:root {
+  --board-bg: #0c1222;
+  --board-panel: #111827;
+  --board-border: #1e293b;
+  --board-text: #f8fafc;
+  --board-text-dim: #94a3b8;
+  --board-accent: #7dd3fc;
+  --subway-badge: #b45309;
+  --subway-badge-text: #fff;
+  --bus-badge: #0284c7;
+  --bus-badge-text: #fff;
+  --error: #f87171;
+}
+
+html[data-theme="light"] {
+  --board-bg: #f1f5f9;
+  --board-panel: #ffffff;
+  --board-border: #cbd5e1;
+  --board-text: #0f172a;
+  --board-text-dim: #64748b;
+  --board-accent: #0369a1;
+  --subway-badge: #b45309;
+  --subway-badge-text: #fff;
+  --bus-badge: #0284c7;
+  --bus-badge-text: #fff;
+  --error: #dc2626;
+}
+
+/* Clean list for arrival rows */
+.arrival-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Line badge – large circle, no squish */
+.line-badge {
+  flex-shrink: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.line-badge--subway { background-color: var(--subway-badge); font-size: 1.35rem; }
+.line-badge--bus { background-color: var(--bus-badge); font-size: 0.85rem; }
+
+/* Arrival table – rigid columns, breathing room */
+.arrival-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.arrival-table th,
+.arrival-table td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--board-border);
+}
+.arrival-table tr:last-child td {
+  border-bottom: none;
+}
+.arrival-table .col-line { width: 5rem; text-align: left; }
+.arrival-table .col-direction { padding-left: 1.5rem; }
+.arrival-table .col-time { width: 6rem; text-align: right; padding-left: 1.5rem; }
+.arrival-table .col-time .col-time-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end;
+}
+
+/* Large mode: line badge + minutes only, bigger type for distance viewing */
+.arrival-table--large .col-line { width: auto; }
+.arrival-table--large .col-time { width: auto; min-width: 6rem; text-align: center; padding-left: 1rem; }
+.arrival-table--large .line-badge {
+  width: 4.5rem;
+  height: 4.5rem;
+  min-width: 4.5rem;
+  min-height: 4.5rem;
+  font-size: 1.75rem;
+}
+.arrival-table--large .line-badge--subway { font-size: 1.75rem; }
+.arrival-table--large .line-badge--bus { font-size: 1.1rem; }
+.arrival-table--large th,
+.arrival-table--large td {
+  padding: 1rem 1.5rem;
+}
+
+/* Grid: ensure each module row has room for 4 arrival rows */
+.arrivals-grid {
+  grid-auto-rows: minmax(520px, auto);
+}
+
+/* Flip card for module config – min-height fits ~4 arrival rows + header */
+.module-flip-container {
+  perspective: 1000px;
+  min-height: 520px;
+}
+.module-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.module-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.module-flip-front,
+.module-flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.module-flip-back {
+  transform: rotateY(180deg);
+}
