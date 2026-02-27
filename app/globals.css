@@ -44,6 +44,133 @@ html[data-theme="light"] {
   --error: #dc2626;
 }
 
+/* 8-bit visual mode: pixel font, crisp edges, retro feel */
+html[data-mode="8bit"] body {
+  font-family: "Press Start 2P", monospace;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+html[data-mode="8bit"] .line-badge {
+  border-radius: 0;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: none;
+}
+html[data-mode="8bit"] [class*="rounded"],
+html[data-mode="8bit"] .module-flip-front,
+html[data-mode="8bit"] .module-flip-back {
+  border-radius: 0;
+}
+html[data-mode="8bit"] button,
+html[data-mode="8bit"] select,
+html[data-mode="8bit"] input {
+  border-radius: 0;
+}
+
+/* 80's visual mode: neon / synthwave – bold type, gradients, glow */
+html[data-mode="80s"] body {
+  font-family: "Orbitron", sans-serif;
+}
+/* Dark theme 80s: deep purple/blue gradient, neon accents */
+html[data-theme="dark"][data-mode="80s"] {
+  --board-bg: #0d0221;
+  --board-panel: #1a0a2e;
+  --board-border: #4a148c;
+  --board-text: #e0e0ff;
+  --board-text-dim: #b39ddb;
+  --board-accent: #ff00ff;
+  --subway-badge: #00e5ff;
+  --subway-badge-text: #0d0221;
+  --bus-badge: #ff00ff;
+  --bus-badge-text: #fff;
+  --error: #ff1744;
+}
+html[data-theme="dark"][data-mode="80s"] body {
+  background: linear-gradient(160deg, #0d0221 0%, #1a0a2e 40%, #16213e 100%) !important;
+  background-attachment: fixed;
+}
+html[data-theme="light"][data-mode="80s"] {
+  --board-bg: #e8e0f0;
+  --board-panel: #fff;
+  --board-border: #7c4dff;
+  --board-text: #1a0a2e;
+  --board-text-dim: #5e35b1;
+  --board-accent: #d500f9;
+  --subway-badge: #00b8d4;
+  --subway-badge-text: #fff;
+  --bus-badge: #aa00ff;
+  --bus-badge-text: #fff;
+  --error: #d50000;
+}
+html[data-mode="80s"] .line-badge {
+  box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+html[data-mode="80s"] [class*="rounded-xl"],
+html[data-mode="80s"] .module-flip-front,
+html[data-mode="80s"] .module-flip-back {
+  box-shadow: 0 0 0 1px var(--board-accent), 0 0 20px rgba(255, 0, 255, 0.15);
+}
+html[data-mode="80s"] button:focus-visible,
+html[data-mode="80s"] select:focus,
+html[data-mode="80s"] input:focus {
+  box-shadow: 0 0 0 2px var(--board-accent), 0 0 12px rgba(255, 0, 255, 0.3);
+}
+
+/* Nature / calm visual mode: muted greens, soft browns, off-whites; rounded, gentle */
+html[data-mode="nature"] body {
+  font-family: "Nunito", sans-serif;
+}
+/* Dark theme nature: deep greens and browns */
+html[data-theme="dark"][data-mode="nature"] {
+  --board-bg: #1a2419;
+  --board-panel: #243020;
+  --board-border: #4a5d47;
+  --board-text: #e8f0e6;
+  --board-text-dim: #9cb098;
+  --board-accent: #7cb87a;
+  --subway-badge: #6b8e6a;
+  --subway-badge-text: #fff;
+  --bus-badge: #8b7355;
+  --bus-badge-text: #fff;
+  --error: #c47c6a;
+}
+html[data-theme="dark"][data-mode="nature"] body {
+  background: linear-gradient(180deg, #1a2419 0%, #243020 50%, #1e2b1c 100%) !important;
+  background-attachment: fixed;
+}
+/* Light theme nature: off-whites, muted greens and browns */
+html[data-theme="light"][data-mode="nature"] {
+  --board-bg: #f5f7f4;
+  --board-panel: #fffefb;
+  --board-border: #b8c9b5;
+  --board-text: #2d3a2b;
+  --board-text-dim: #5a6d58;
+  --board-accent: #5a8c58;
+  --subway-badge: #5a8c58;
+  --subway-badge-text: #fff;
+  --bus-badge: #8b7355;
+  --bus-badge-text: #fff;
+  --error: #b85c4a;
+}
+html[data-mode="nature"] .line-badge {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+html[data-mode="nature"] [class*="rounded-xl"],
+html[data-mode="nature"] .module-flip-front,
+html[data-mode="nature"] .module-flip-back {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+html[data-mode="nature"] button:focus-visible,
+html[data-mode="nature"] select:focus,
+html[data-mode="nature"] input:focus {
+  box-shadow: 0 0 0 2px var(--board-accent), 0 2px 8px rgba(90, 140, 88, 0.2);
+}
+
 /* Clean list for arrival rows */
 .arrival-list {
   list-style: none;

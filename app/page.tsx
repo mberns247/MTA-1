@@ -64,11 +64,14 @@ export type LayoutType = "grid" | "list" | "page";
 
 export type ThemeMode = "dark" | "light";
 
+export type VisualMode = "classic" | "8bit" | "80s" | "nature";
+
 type Config = {
   refreshIntervalSec: number;
   slots: SlotConfig[];
   layout: LayoutType;
   theme: ThemeMode;
+  mode: VisualMode;
   largeMode: boolean;
   sleepMode: boolean;
   sleepStart: string;
@@ -80,6 +83,7 @@ const defaultConfig: Config = {
   slots: DEFAULT_SLOTS,
   layout: "list",
   theme: "dark",
+  mode: "classic",
   largeMode: false,
   sleepMode: false,
   sleepStart: "22:00",
@@ -116,6 +120,7 @@ function loadConfig(): Config {
         ? parsed.layout
         : defaultConfig.layout;
     const theme = parsed.theme === "light" || parsed.theme === "dark" ? parsed.theme : defaultConfig.theme;
+    const mode = parsed.mode === "classic" || parsed.mode === "8bit" || parsed.mode === "80s" || parsed.mode === "nature" ? parsed.mode : defaultConfig.mode;
     const largeMode = typeof parsed.largeMode === "boolean" ? parsed.largeMode : defaultConfig.largeMode;
     const sleepMode = typeof parsed.sleepMode === "boolean" ? parsed.sleepMode : defaultConfig.sleepMode;
     const validTime = (s: unknown): s is string => typeof s === "string" && SLEEP_TIME_OPTIONS.some((o) => o.value === s);
@@ -126,6 +131,7 @@ function loadConfig(): Config {
       slots,
       layout,
       theme,
+      mode,
       largeMode,
       sleepMode,
       sleepStart,
@@ -225,6 +231,11 @@ export default function DashboardPage() {
     if (typeof document === "undefined") return;
     document.documentElement.setAttribute("data-theme", config.theme);
   }, [config.theme]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.setAttribute("data-mode", config.mode);
+  }, [config.mode]);
 
   useEffect(() => {
     const id = setInterval(() => setLiveTime(new Date()), 1000);
@@ -499,6 +510,21 @@ export default function DashboardPage() {
                     </button>
                     <span className="text-sm" style={boardStyles.textDim}>Dark</span>
                   </div>
+                </div>
+                <div className="flex items-center justify-between gap-4 py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
+                  <label htmlFor="settings-mode" className="text-sm font-medium" style={boardStyles.text}>Mode</label>
+                  <select
+                    id="settings-mode"
+                    value={config.mode}
+                    onChange={(e) => updateConfig({ mode: (e.target.value === "8bit" ? "8bit" : e.target.value === "80s" ? "80s" : e.target.value === "nature" ? "nature" : "classic") as VisualMode })}
+                    className="rounded border px-3 py-2 text-sm focus:outline-none"
+                    style={boardStyles.input}
+                  >
+                    <option value="classic">Classic NYC</option>
+                    <option value="8bit">8 bit</option>
+                    <option value="80s">80's</option>
+                    <option value="nature">Nature / calm</option>
+                  </select>
                 </div>
                 <div className="flex items-center justify-between gap-4 py-5" style={{ borderBottom: "1px solid var(--board-border)" }}>
                   <span className="text-sm font-medium" style={boardStyles.text}>Layout</span>
